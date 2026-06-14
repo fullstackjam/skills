@@ -11,6 +11,20 @@ Install as a Claude Code plugin marketplace:
 
 After installation, Claude Code can discover and invoke any skill under `skills/`.
 
+## Get updates
+
+This marketplace is served from this git repo, so updates are pulled, not pushed.
+When a new version is published, refresh the marketplace catalog and then update
+the plugin:
+
+```text
+/plugin marketplace update skills      # re-fetch repo metadata
+/plugin update fullstackjam@skills     # update the installed plugin
+```
+
+`skills` is the marketplace name; `fullstackjam` is the plugin name. You can also
+open the `/plugin` menu and update from there.
+
 ## Skills
 
 - `sound-like-me` — write, rewrite, and polish any outgoing text (blog posts,

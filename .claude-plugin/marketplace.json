@@ -8,7 +8,7 @@
     {
       "name": "fullstackjam",
       "description": "Personal Claude Code skills for fullstackjam workflows. Currently includes a personal-voice writing skill; more skills can be added over time.",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "category": "productivity",
       "source": "./",
       "homepage": "https://github.com/fullstackjam/skills",
