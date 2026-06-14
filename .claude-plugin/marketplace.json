@@ -7,7 +7,7 @@
   "plugins": [
     {
       "name": "fullstackjam",
-      "description": "Personal Claude Code skills for fullstackjam workflows. Currently includes a writing-style skill; more skills can be added over time.",
+      "description": "Personal Claude Code skills for fullstackjam workflows. Currently includes a personal-voice writing skill; more skills can be added over time.",
       "version": "0.1.0",
       "category": "productivity",
       "source": "./",
