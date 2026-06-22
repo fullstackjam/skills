@@ -29,10 +29,15 @@ metadata:
    - 有 vault 线索：`op vault list --format json` 模糊匹配昵称。
    - 找 item：`op item list --vault <V> --format json`，按服务名 / 标题模糊匹配；没把握就把
      标题列给用户选。
-3. **看字段（只读元数据，关键）**：`op item get <ITEM> --vault <V> --format json`，**不要加
-   `--reveal`，也不要用 `op read` 去"看一眼"**。从返回里读字段 label，确认
-   `username` / `password` / `credential` 等哪些存在。带 concealed 的值会以掩码返回——这正
-   是要的。
+3. **看字段（只抽 label，别 dump 原始输出——关键）**：`op item get --format json` 的**原始
+   输出里带明文**（不加 `--reveal` 也一样，实测会带出值），所以**绝不直接打印原始输出**，
+   只把 label 抽出来看；也别用 `op read` 去"看一眼"值：
+
+   ```bash
+   op item get <ITEM> --vault <V> --format json | python3 -c "import json,sys;print([f.get('label') for f in json.load(sys.stdin).get('fields',[]) if f.get('label')])"
+   ```
+
+   从 label 列表确认 `username` / `password` / `credential` 等哪些字段在。
 4. **定环境变量名**：默认字段 label 转大写（`username` → `USERNAME`）；用户能临时覆盖
    （"as PGUSER/PGPASSWORD"）。
 5. **注入并执行**（见下）。密钥不打印，只回报退出码和命令输出。
@@ -73,7 +78,8 @@ TOKEN="op://Work/API/credential" op run -- sh -c 'curl -H "Authorization: Bearer
 
 ## 安全底线
 
-- 发现字段只读元数据，不 `--reveal`、不为查看而 `op read`。
+- 发现字段只抽 label——`op item get --format json` 原始输出含明文，务必管道过滤只留 label，
+  别直接打印；不 `--reveal`、不为查看而 `op read`。
 - 密钥不打印、不回显、不 `set -x` / 不 dump env；靠 `op run` 默认掩码兜底。
 - 不在磁盘留明文。
 
@@ -83,6 +89,8 @@ TOKEN="op://Work/API/credential" op run -- sh -c 'curl -H "Authorization: Bearer
   `op signin`；没装 `op` 见 <https://developer.1password.com/docs/cli/get-started/>。
 - vault / item 找不到或有歧义 → 列候选问用户。
 - 字段缺失（Login item 没有 `credential`）→ 只注入存在的，并说明。
+- `op run` 报"item 已删除 / 归档"但 item 明明在 → 有同名的已归档 item，按标题解析撞上了它；
+  换个唯一标题，或改用 item ID 引用（`op://<Vault>/<item-id>/<field>`）。
 
 ## 不做
 
