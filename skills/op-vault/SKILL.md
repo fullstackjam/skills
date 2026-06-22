@@ -55,7 +55,21 @@ USERNAME="op://<Vault>/<Item>/username" PASSWORD="op://<Vault>/<Item>/password" 
 - **密钥只能当命令行参数传、又没有 `--password-stdin` 之类选项**：别硬塞（会进 `ps`），
   告诉用户这个工具没有安全的传法。
 - **已有用户写好的 `.env.tpl`**：直接 `op run --env-file=.env.tpl -- <命令>`。本 skill 自己
-  不建、不提交模板。
+  不建、不提交模板。注意 `.env.tpl` 里的 `op://` 引用会暴露 vault / item / 字段名（不暴露
+  值）——私有仓库无所谓，公开前先扫一眼命名。
+
+## 例子
+
+```bash
+# 一次性 psql（dev vault 里某 item 的 username/password）
+PGUSER="op://Dev/PG/username" PGPASSWORD="op://Dev/PG/password" op run -- psql -h db.internal -c 'select 1'
+
+# docker compose（命令自己读环境变量）
+DB_PASSWORD="op://Dev/PG/password" op run -- docker compose up
+
+# 带 bearer token 的 curl（变量要在子进程里展开，所以包一层 sh -c + 单引号）
+TOKEN="op://Work/API/credential" op run -- sh -c 'curl -H "Authorization: Bearer $TOKEN" https://api.example.com/me'
+```
 
 ## 安全底线
 
@@ -65,7 +79,8 @@ USERNAME="op://<Vault>/<Item>/username" PASSWORD="op://<Vault>/<Item>/password" 
 
 ## 错误处理
 
-- 未登录 → 引导解锁桌面 App。
+- 未登录 → 让用户解锁 1Password 桌面 App（开机 / 重启后，CLI 要先解锁 App 才能用），必要时
+  `op signin`；没装 `op` 见 <https://developer.1password.com/docs/cli/get-started/>。
 - vault / item 找不到或有歧义 → 列候选问用户。
 - 字段缺失（Login item 没有 `credential`）→ 只注入存在的，并说明。
 
