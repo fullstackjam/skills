@@ -38,6 +38,14 @@ open the `/plugin` menu and update from there.
 /fullstackjam:sound-like-me 这段像不像我的写法
 ```
 
+- `op-vault` — 从 1Password 取凭据，注入到要跑的命令里运行（`op run`），密钥明文不进对话 /
+  输出。检测到命令缺密码 / token / API key 时自动介入，也可点名 vault（"dev vault"）。
+  需要装了 `op` CLI 且开启 1Password 桌面 App 集成。
+
+```text
+/fullstackjam:op-vault 用 dev vault 的数据库密码跑 psql
+```
+
 ## Add a skill
 
 Create `skills/<name>/SKILL.md` with frontmatter:
