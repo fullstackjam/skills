@@ -46,6 +46,17 @@ open the `/plugin` menu and update from there.
 /fullstackjam:op-vault 用 dev vault 的数据库密码跑 psql
 ```
 
+- `ship-pr` — move a finished change from a feature branch to the default branch
+  through a pull request, in any GitHub repo. Confirm the branch → push → open
+  the PR (respecting the repo's template) → wait for CI → review the diff →
+  triage findings (self-fix nits, escalate real decisions, merge when clean) →
+  local cleanup. No `--auto`, no `--admin`; the review gate stays in the loop.
+
+```text
+/fullstackjam:ship-pr open a PR for this branch
+/fullstackjam:ship-pr 提 PR
+```
+
 ## Add a skill
 
 Create `skills/<name>/SKILL.md` with frontmatter:
