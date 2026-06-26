@@ -8,7 +8,7 @@
     {
       "name": "fullstackjam",
       "description": "Personal Claude Code skills for fullstackjam workflows. Includes a personal-voice writing skill, a 1Password credential-injection skill, and a repo-agnostic ship-a-PR workflow; more skills can be added over time.",
-      "version": "0.3.0",
+      "version": "0.3.1",
       "category": "productivity",
       "source": "./",
       "homepage": "https://github.com/fullstackjam/skills",
